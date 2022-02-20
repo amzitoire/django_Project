@@ -1,12 +1,22 @@
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from django.contrib.auth.models import Group
-from .models import *
-from .forms import CustomUserCreationForm, CustomUserChangeForm
 
-# Register your models here.
-admin.site.unregister(Group)
+from .models import User
 
+
+class CustomUserCreationForm(UserCreationForm):
+
+    class Meta:
+        model = User
+        fields = ('email',)
+
+
+class CustomUserChangeForm(UserChangeForm):
+
+    class Meta:
+        model = User
+        fields = ('email',)
 
 class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
@@ -26,5 +36,3 @@ class CustomUserAdmin(UserAdmin):
     )
     search_fields = ('email',)
     ordering = ('email',)
-
-admin.site.register(User, CustomUserAdmin)

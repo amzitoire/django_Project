@@ -15,7 +15,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from Biblio.views import *
+from django.contrib.auth.decorators import login_required
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('',LoginView.as_view(),name='home'),
+    path('logout/', LogoutView.as_view(),name='logout'),
+    path('biblio/', login_required(TemplateView.as_view(template_name='biblio.html'))),
 ]
