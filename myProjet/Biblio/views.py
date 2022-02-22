@@ -149,6 +149,12 @@ def changePassword_user(request,*args,**kwargs):
 def add_epreuve(request, **kwargs):
     template_name = 'add-epreuve.html'
 
+    current_user = request.user
+    obj = get_object_or_404(
+        User,pk=current_user.id,
+        # pk=kwargs.get('pk'),
+    )
+
     objet = Epreuve()
     
     form = EpreuveForm(request.POST, request.FILES or None)
@@ -159,7 +165,7 @@ def add_epreuve(request, **kwargs):
         objet.filiere = form.cleaned_data.get('filiere')
         objet.professeur = form.cleaned_data.get('professeur')
         objet.file = form.cleaned_data.get('file')
-        objet.id_user = form.cleaned_data.get('id_user')
+        objet.id_user = obj.id
         objet.save()
         return HttpResponseRedirect("/epreuve")
 
@@ -175,6 +181,11 @@ def add_epreuve(request, **kwargs):
 
 def add_correction(request, **kwargs):
     template_name = 'add-correction.html'
+    current_user = request.user
+    obj1 = get_object_or_404(
+        User,pk=current_user.id,
+        # pk=kwargs.get('pk'),
+    )
 
     obj = get_object_or_404(
         Epreuve,
@@ -188,7 +199,7 @@ def add_correction(request, **kwargs):
         print(form.cleaned_data)
         objet.intitulet = form.cleaned_data.get('intitulet')
         objet.file = form.cleaned_data.get('file')
-        objet.id_user = form.cleaned_data.get('id_user')
+        objet.id_user = obj1.id
         objet.id_epreuve = epreuve.values().get()['id']
         objet.save()
         return HttpResponseRedirect("/list_profil")

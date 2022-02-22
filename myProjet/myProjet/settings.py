@@ -85,7 +85,7 @@ WSGI_APPLICATION = 'myProjet.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'bibli_db',#base de donnee
+        'NAME': 'biblio_db',#base de donnee
         'USER': 'root',
         'PASSWORD': '',
         'HOST': 'localhost',   # Or an IP Address that your DB is hosted on

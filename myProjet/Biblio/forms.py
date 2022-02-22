@@ -9,7 +9,7 @@ from .models import Epreuve, User
 
 users: array = []
 for user in User.objects.all():
-    userelt = (user.id, user.name)
+    userelt = (user.id, user.email)
     users.append(userelt)
 
 
@@ -107,15 +107,6 @@ class EpreuveForm(forms.ModelForm):
 
         )
     )
-    id_user = forms.ChoiceField(
-        required=True,  
-        choices=[(x,y) for (x,y) in users],    
-        widget=forms.Select(
-            attrs={
-                'type': 'select'
-            }
-        )
-    )
     
     
     class Meta: 
@@ -147,15 +138,6 @@ class CorrectionForm(forms.ModelForm):
                 'type': 'file'
             }
 
-        )
-    )
-    id_user = forms.ChoiceField(
-        required=True,  
-        choices=[(x,y) for (x,y) in users],    
-        widget=forms.Select(
-            attrs={
-                'type': 'select'
-            }
         )
     )
     

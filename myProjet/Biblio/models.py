@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.base_user import BaseUserManager
@@ -63,18 +64,17 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class Super(models.Model):
     intitulet = models.CharField(max_length=200)
-    id_user= models.ForeignKey(User, on_delete=models.CASCADE, related_name='product_magasin')
     file = models.FileField(upload_to='files')
 
     class Meta:
         abstract = True
-        ordering = ['name']
 
 
 class Epreuve(Super):
     matiere = models.CharField(max_length=200)
     filiere = models.CharField(max_length=200)
     professeur = models.CharField(max_length=200)
+    id_user= models.ForeignKey(User, on_delete=models.CASCADE)
 
     
     def get_url(self):
@@ -82,7 +82,8 @@ class Epreuve(Super):
     
 
 class Correction(Super):
-    id_epreuve= models.OneToOneField(Epreuve, on_delete=models.CASCADE, related_name="magasin_profil")
+    id_epreuve= models.OneToOneField(Epreuve, on_delete=models.CASCADE)
+    id_user= models.ForeignKey(User, on_delete=models.CASCADE)
     def get_url(self):
         return reverse(kwargs={'pk':self.id})
 
