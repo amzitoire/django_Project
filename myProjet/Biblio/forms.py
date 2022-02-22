@@ -1,10 +1,16 @@
+import array
 from pyexpat import model
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm,PasswordChangeForm
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from .models import User
+from .models import Epreuve, User
+
+users: array = []
+for user in User.objects.all():
+    userelt = (user.id, user.email)
+    users.append(userelt)
 
 
 class CustomUserCreationForm(UserCreationForm,forms.Form):
@@ -43,3 +49,101 @@ class CustomUserAdmin(UserAdmin):
     )
     search_fields = ('email',)
     ordering = ('email',)
+
+########################################################################################################
+class EpreuveForm(forms.ModelForm):
+
+    intitulet = forms.CharField(
+        required=True,
+        max_length=200,
+        strip=True,
+        min_length=2,
+        widget=forms.TextInput(
+            attrs={
+                'type': 'text'
+            }
+        )
+    )
+
+    matiere = forms.CharField(
+        required=True,
+        max_length=200,
+        strip=True,
+        min_length=2,
+        widget=forms.TextInput(
+            attrs={
+                'type': 'text'
+            }
+        )
+    )
+    filiere = forms.CharField(
+        required=True,
+        max_length=200,
+        strip=True,
+        min_length=2,
+        widget=forms.TextInput(
+            attrs={
+                'type': 'text'
+            }
+        )
+    )
+    professeur = forms.CharField(
+        required=True,
+        max_length=200,
+        strip=True,
+        min_length=2,
+        widget=forms.TextInput(
+            attrs={
+                'type': 'text'
+            }
+        )
+    )
+    file = forms.FileField(
+        required=True,
+        widget=forms.FileInput(
+            attrs={
+                'type': 'file'
+            }
+
+        )
+    )
+    
+    
+    class Meta: 
+        model = Epreuve
+        fields = [
+            'intitulet',
+            'filiere',
+            'matiere',
+            'professeur',
+            'file'
+        ]
+class CorrectionForm(forms.ModelForm):
+
+    intitulet = forms.CharField(
+        required=True,
+        max_length=200,
+        strip=True,
+        min_length=2,
+        widget=forms.TextInput(
+            attrs={
+                'type': 'text'
+            }
+        )
+    )
+    file = forms.FileField(
+        required=True,
+        widget=forms.FileInput(
+            attrs={
+                'type': 'file'
+            }
+
+        )
+    )
+    
+    class Meta: 
+        model = Epreuve
+        fields = [
+            'intitulet',
+            'file'
+        ]

@@ -1,8 +1,10 @@
+from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.base_user import BaseUserManager
 from django.urls import reverse
 from django.utils import timezone
+
 # Create your models here.
 #amadou sall
 class CustomUserManager(BaseUserManager):
@@ -15,7 +17,7 @@ class CustomUserManager(BaseUserManager):
         Create and save a User with the given email and password.
         """
         if not email:
-            raise ValueError(_('The Email must be set'))
+            raise ValueError('The Email must be set')
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
@@ -31,9 +33,9 @@ class CustomUserManager(BaseUserManager):
         extra_fields.setdefault('is_active', True)
 
         if extra_fields.get('is_staff') is not True:
-            raise ValueError(_('Superuser must have is_staff=True.'))
+            raise ValueError('Superuser must have is_staff=True.')
         if extra_fields.get('is_superuser') is not True:
-            raise ValueError(_('Superuser must have is_superuser=True.'))
+            raise ValueError('Superuser must have is_superuser=True.')
         return self.create_user(email, password, **extra_fields)
     
 class User(AbstractBaseUser, PermissionsMixin):
@@ -58,3 +60,31 @@ class User(AbstractBaseUser, PermissionsMixin):
         
     
 #fin amadou sall
+
+
+class Super(models.Model):
+    intitulet = models.CharField(max_length=200)
+    file = models.FileField(upload_to='files')
+
+    class Meta:
+        abstract = True
+
+
+class Epreuve(Super):
+    matiere = models.CharField(max_length=200)
+    filiere = models.CharField(max_length=200)
+    professeur = models.CharField(max_length=200)
+    id_user= models.ForeignKey(User, on_delete=models.CASCADE)
+
+    
+    def get_url(self):
+        return reverse(kwargs={'pk':self.id})
+    
+
+class Correction(Super):
+    id_epreuve= models.OneToOneField(Epreuve, on_delete=models.CASCADE)
+    id_user= models.ForeignKey(User, on_delete=models.CASCADE)
+    def get_url(self):
+        return reverse(kwargs={'pk':self.id})
+
+# Create your models here.
