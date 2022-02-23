@@ -184,7 +184,6 @@ def add_correction(request, **kwargs):
     current_user = request.user
     obj1 = get_object_or_404(
         User,pk=current_user.id,
-        # pk=kwargs.get('pk'),
     )
 
     obj = get_object_or_404(
