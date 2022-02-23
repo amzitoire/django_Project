@@ -1,16 +1,10 @@
 import array
-from pyexpat import model
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm,PasswordChangeForm
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
 from .models import Epreuve, User
-
-users: array = []
-for user in User.objects.all():
-    userelt = (user.id, user.email)
-    users.append(userelt)
 
 
 class CustomUserCreationForm(UserCreationForm,forms.Form):
