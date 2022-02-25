@@ -20,18 +20,13 @@
     </div>
 </nav>
 <p>Vous êtes identifié!</p>
-les epreuves {% for epreuve in epreuves %}
+les corrections {% for correction in corrections %}
 <div class="card text-left col-3">
     <img class="card-img-top" src="holder.js/100px180/" alt="">
     <div class="card-body">
-        <h4 class="card-title">Epreuve <strong>{{ epreuve.id }}</strong></h4>
-        <p> Intitulet : <strong>{{ epreuve.intitulet }}</strong> </p>
-        <p> Matiere : <strong>{{ epreuve.matiere }}</strong> </p>
-        <p> Filiere : <strong>{{ epreuve.filiere}}</strong></p>
-        <p>Professeur : <strong>{{ epreuve.professeur }}</strong> </p>
-        <a name="" id="" class="btn btn-primary" href="/biblio/download/{{ epreuve.file }}" class="btn btn-primary">Download</a>
-        <a name="" id="" class="btn btn-primary" href="#" role="button">Ajouter correction</a>
-        <a name="" id="" class="btn btn-primary" href="correction/{{epreuve.id}}" role="button">Corrections</a>
+        <h4 class="card-title">correction <strong>{{ correction.id }}</strong></h4>
+        <p> Intitulet : <strong>{{ correction.intitulet }}</strong> </p>
+        <a name="" id="" class="btn btn-primary" href="/biblio/download/{{ correction.file }}" class="btn btn-primary">Download</a>
     </div>
 </div>
 {%endfor %} {% endblock %} {% block 'js'%} {% endblock%}

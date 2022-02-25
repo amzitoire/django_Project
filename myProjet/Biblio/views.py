@@ -1,3 +1,4 @@
+import os
 from django.contrib.auth import update_session_auth_hash
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth import authenticate, login, logout
@@ -157,7 +158,7 @@ def add_epreuve(request, **kwargs):
 
     objet = Epreuve()
     
-    form = EpreuveForm(request.POST, request.FILES or None)
+    form = EpreuveForm(request.POST, request.FILES)
     if form.is_valid():
         print(form.cleaned_data)
         objet.intitulet = form.cleaned_data.get('intitulet')
@@ -215,7 +216,7 @@ def add_correction(request, **kwargs):
         )
 
 def list_epreuve(request):
-    template_name = '#.html' #######Template de view epreuve
+    template_name = 'biblio.html' #######Template de view epreuve
     epreuves = Epreuve.objects.all()
     context ={
         'epreuves' : epreuves,
@@ -224,14 +225,37 @@ def list_epreuve(request):
     return render(request=request, template_name=template_name, context=context)
 
 def list_correction(request):
-    template_name = '#.html'  ###Template de view correction
+    template_name = 'biblio.html'  ###Template de view correction
     corrections = Correction.objects.all()
     context ={
         'corrections' : corrections,
     }
          
     return render(request=request, template_name=template_name, context=context)
+##
+def index(request):
+    template_name = 'biblio.html'  ###Template de view correction
+    corrections = Correction.objects.all()
+    epreuves = Epreuve.objects.all()
+    context ={
+        'corrections' : corrections,
+        'epreuves' : epreuves,
+    }
+    return render(request=request, template_name=template_name, context=context)
 
+def correction_byId(request, **kwargs):
+    template_name = 'correction.html'  ###Template de view correction
+    obj = get_object_or_404(
+        Epreuve,
+        pk = kwargs.get('pk')
+    )
+    corrections = Correction.objects.filter(id_epreuve=obj.id)
+    context ={
+        'corrections' : corrections,
+    }
+         
+    return render(request=request, template_name=template_name, context=context)
+##
 def update_epreuve(request, *args, **kwargs):
     template_name = '#.html' ###Template de update epreuve
     obj = get_object_or_404(
@@ -358,3 +382,15 @@ def delete_correction(request, *args, **kwargs):
         request=request,
         template_name=template_name
         )
+    ########################
+  
+def download(request, *args, **kwargs):
+    path=kwargs.get('path')
+    file_path = "files/" + path
+    if os.path.exists(file_path):
+        with open(file_path, 'rb') as fh:
+            response = HttpResponse(fh.read(), content_type="application/vnd.ms-excel"
+                                    )
+            response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
+            return response
+    raise Http404
