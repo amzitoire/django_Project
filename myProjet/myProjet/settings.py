@@ -140,6 +140,3 @@ AUTH_USER_MODEL = 'Biblio.User'
 
 LOGIN_REDIRECT_URL = '/biblio/'
 LOGIN_URL = '/'
-# TEMPLATE_DIRS = (
-#     BASE_DIR + '/templates/',
-# )
