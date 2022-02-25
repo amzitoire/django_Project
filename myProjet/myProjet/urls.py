@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from Biblio.views import *
 from django.contrib.auth.decorators import login_required
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,4 +29,4 @@ urlpatterns = [
     path('biblio/correction/<int:pk>', login_required(correction_byId),name = 'corrections'),
     path('update/', login_required(update_user),name='update'),
     path('password/', login_required(changePassword_user),name='password'),
-]
+]+ static('/biblio/read/files/', document_root='files/')
