@@ -29,6 +29,7 @@ les epreuves {% for epreuve in epreuves %}
         <p> Matiere : <strong>{{ epreuve.matiere }}</strong> </p>
         <p> Filiere : <strong>{{ epreuve.filiere}}</strong></p>
         <p>Professeur : <strong>{{ epreuve.professeur }}</strong> </p>
+        <a name="" id="" class="btn btn-primary" href="/biblio/read/{{ epreuve.file }}" class="btn btn-primary">Read</a>
         <a name="" id="" class="btn btn-primary" href="/biblio/download/{{ epreuve.file }}" class="btn btn-primary">Download</a>
         <a name="" id="" class="btn btn-primary" href="#" role="button">Ajouter correction</a>
         <a name="" id="" class="btn btn-primary" href="correction/{{epreuve.id}}" role="button">Corrections</a>
