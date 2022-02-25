@@ -23,7 +23,8 @@ urlpatterns = [
     path('',LoginView.as_view(),name='home'),
     path('logout/', LogoutView.as_view(),name='logout'),
     path('inscription/',create_user,name='inscription'),
-    path('biblio/', login_required(TemplateView.as_view(template_name='biblio.html'))),
+    path('biblio/download/files/<str:path>/',download,name='download'),
+    path('biblio/', login_required(list_epreuve,list_correction)),
     path('update/', login_required(update_user),name='update'),
     path('password/', login_required(changePassword_user),name='password'),
 ]
