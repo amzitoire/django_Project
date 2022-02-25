@@ -232,7 +232,30 @@ def list_correction(request):
     }
          
     return render(request=request, template_name=template_name, context=context)
+##
+def index(request):
+    template_name = 'biblio.html'  ###Template de view correction
+    corrections = Correction.objects.all()
+    epreuves = Epreuve.objects.all()
+    context ={
+        'corrections' : corrections,
+        'epreuves' : epreuves,
+    }
+    return render(request=request, template_name=template_name, context=context)
 
+def correction_byId(request, **kwargs):
+    template_name = 'correction.html'  ###Template de view correction
+    obj = get_object_or_404(
+        Epreuve,
+        pk = kwargs.get('pk')
+    )
+    corrections = Correction.objects.filter(id_epreuve=obj.id)
+    context ={
+        'corrections' : corrections,
+    }
+         
+    return render(request=request, template_name=template_name, context=context)
+##
 def update_epreuve(request, *args, **kwargs):
     template_name = '#.html' ###Template de update epreuve
     obj = get_object_or_404(

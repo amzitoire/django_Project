@@ -24,7 +24,8 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(),name='logout'),
     path('inscription/',create_user,name='inscription'),
     path('biblio/download/files/<str:path>/',download,name='download'),
-    path('biblio/', login_required(list_epreuve,list_correction)),
+    path('biblio/', login_required(list_epreuve),name = 'index'),
+    path('biblio/correction/<int:pk>', login_required(correction_byId),name = 'corrections'),
     path('update/', login_required(update_user),name='update'),
     path('password/', login_required(changePassword_user),name='password'),
 ]
