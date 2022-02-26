@@ -10,9 +10,24 @@ from .models import *
 from .forms import *
 
 # Create your views here.
+def home(request, *args, **kwargs):
+    return render(request, 'pages/home.html')
+
+def about(request, *args, **kwargs):
+    return render(request, 'pages/about.html')
+
+def contact(request, *args, **kwargs):
+    return render(request, 'pages/contact.html')
+
+def politique(request, *args, **kwargs):
+    return render(request, 'pages/politiqueConfidentialite.html')
+
+def using(request, *args, **kwargs):
+    return render(request, 'pages/conditionUtilisation.html')
+
 class LoginView(TemplateView):
 
-  template_name = 'index.html'
+  template_name = 'Biblio/login.html'
 
   def post(self, request, **kwargs):
 
@@ -37,7 +52,7 @@ class LogoutView(TemplateView):
     return render(request, self.template_name)
   
 def create_user(request,*args,**kwargs):
-    template_name= 'inscription.html'
+    template_name= 'Biblio/inscription.html'
     if request.method == 'GET':
         form = CustomUserCreationForm(
             initial={
@@ -116,7 +131,6 @@ def update_user(request,*args,**kwargs):
 def changePassword_user(request,*args,**kwargs):
     template_name= 'update_password.html'
     current_user = request.user
-    
     
     obj = get_object_or_404(
         User,pk=current_user.id,

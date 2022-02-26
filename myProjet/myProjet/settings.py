@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'Biblio',
     'crispy_forms',
 ]
@@ -140,3 +141,6 @@ AUTH_USER_MODEL = 'Biblio.User'
 
 LOGIN_REDIRECT_URL = '/biblio/'
 LOGIN_URL = '/'
+
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'

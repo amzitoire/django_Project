@@ -1,20 +1,18 @@
-{% extends 'base.html'%}
+{% extends 'layouts/base.html'%}
 
 {% block 'css' %}
 {% endblock %}
 {% block title %}
-    homepage 
+    Login
 {% endblock %}
 {%block 'content' %}
-<form method="post"  role="form" action="/">
+<form method="post" role="form" action="/">
     {% csrf_token %}
     <input type="text" name="username" placeholder="Utilisateur">
     <input type="password" name="password" placeholder="Mot de passe">
     <input type="submit" value="login" />
-    </form>
+</form>
 {% endblock %}
 {% block 'js'%}
- 
-{% endblock%}
 
-  
+{% endblock%}
