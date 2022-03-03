@@ -1,30 +1,8 @@
-{% extends 'base.html'%} {% block 'css' %}
-<style>
-    .library {
-        text-align: center;
-        margin-top: 5%;
-        color: black;
-    }
-    
-    #connect {
-        background: linear-gradient(#8a8787, #bbbbc5);
-    }
-    
-    header {
-        background: url(backgroud.jpg) no-repeat center;
-        height: 200px;
-    }
-    
-    h1 {
-        text-align: center;
-        margin-top: 11%;
-        font-family: cursive;
-    }
-    
-    body {
-        background: linear-gradient(#fdfdff, #8a8787);
-    }
-</style>{% endblock %} {% block title %} homepage {% endblock %} {%block 'content' %}
+{% extends 'base.html'%} 
+{% block 'css' %}
+{% endblock %} 
+{% block title %} homepage {% endblock %} 
+{%block 'content' %}
 <nav class="navbar bg-dark navbar-expand-sm navbar-dark fixed-top">
     <div class="col-4 col-lg-6 text-center">
         <a href="{% url 'home' %}" class="navbar-brand mx-5">
@@ -34,7 +12,7 @@
     <div class="col text-center mx-5 lg:text-lg">
         <ul class="navbar-nav">
             <li class="nav-item active">
-                <a href="{% url 'home' %}" class="nav-link mx-3">
+                <a href="{% url 'index' %}" class="nav-link mx-3">
                     <span class="text-gray-400 hover:text-white hover:break-after-column">bibliotheque</span>
                 </a>
             </li>
@@ -44,7 +22,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{% url 'home' %}" class="nav-link mx-3">
+                <a href="{% url 'login' %}" class="nav-link mx-3">
                     <span class="text-gray-400 hover:text-white">Se connecter</span>
                 </a>
             </li>
@@ -56,82 +34,30 @@
         </ul>
     </div>
 </nav>
-<header>
-    <div class="body">
-        <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
-            <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <h1>BIENVENUE A VOTRE MEILLEURE BIBLIOTHEQUE DIGITALE</h1>
-                </div>
-                <div class="carousel-item">
-                    <h1>TROUVEZ LES MEILLEURES EPREUVES ET CORRECTIONS</h1>
-                </div>
-                <div class="carousel-item">
-                    <h1>INSCRIVEZ VOUS POUR PREPARER VOS EXAMENS ET CONCOURS</h1>
-                </div>
-            </div>
-        </div>
-</header>
+
 <br>
 <br>
 <br>
 <div class="body">
-    <div id="connect" class="container row w-25 w-25-sm p-0-sm mx-auto shadow-lg mt-5"><br><br>
-        <h5 class="library">Connectez-vous</h5>
-        <form method="post" role="form" action="/">
-            {% csrf_token %}
-            <div class="form-group">
-                <input type="text" class="form-control my-3" name="username" placeholder="Utilisateur">
-            </div>
-            <div class="form-group">
-                <input type="password" class="form-control my-3" name="password" placeholder="Mot de passe">
-            </div>
-            <div class="form-group mx-auto text-center mt-5">
-                <input type="submit" value="login" class="btn btn-success" />
-            </div>
-            <a href="/inscription">S'inscrire</a><br><br>
-        </form>
+   
+    les epreuves 
+    {% for epreuve in epreuves %}
+    <div class="card text-left col-3">
+        <img class="card-img-top" src="holder.js/100px180/" alt="">
+        <div class="card-body">
+            <h4 class="card-title">Epreuve <strong>{{ epreuve.id }}</strong></h4>
+            <p> Intitulet : <strong>{{ epreuve.intitulet }}</strong> </p>
+            <p> Matiere : <strong>{{ epreuve.matiere }}</strong> </p>
+            <p> Filiere : <strong>{{ epreuve.filiere}}</strong></p>
+            <p>Professeur : <strong>{{ epreuve.professeur }}</strong> </p>
+            <a name="" id="" class="btn btn-primary" href="/biblio/read/{{ epreuve.file }}" class="btn btn-primary">Read</a>
+            <a name="" id="" class="btn btn-primary" href="/login/" class="btn btn-primary">Download</a>   
+        </div>
     </div>
-    <div class="container ">
-        <footer class="py-5 hidden-print ">
-            <div class="row ">
-                <hr>
-                <div class="col-10 ">
-                    <p class="copyright text-gray-400 text-center mb-1 my-3 ">
-                        Conçu avec <span class="text-xl text-pink-300 ">&hearts;</span> et beaucoup de <i class="fa fa-coffee " style="color: #ccc; "></i> sur <span>Django</span> &middot; &copy; Copyright 2022 . Tous Droits Réservés.
-                    </p>
-                </div>
-                <div class="col my-3 ">
-                    <ul class="social-icons list-inline ">
-                        <li class="list-inline-item ">
-                            <a href="https://www.facebook.com/groups/djangodevelopersnetwork/ " target="_blank ">
-                                <span class="hover-bg-red "><i class="fa fa-facebook "></i></span>
-                            </a>
-                        </li>
-                        <li class="list-inline-item ">
-                            <a href="https://twitter.com/djangoproject " target="_blank ">
-                                <i class="fa fa-twitter "></i>
-                            </a>
-                        </li>
-                        <li class="list-inline-item ">
-                            <a href="https://www.youtube.com/watch?v=F5mRW0jo-U4 " target="_blank ">
-                                <i class="fa fa-youtube "></i>
-                            </a>
-                        </li>
-                        <li class="list-inline-item ">
-                            <a href="https://github.com/django " target="_blank ">
-                                <i class="fa fa-github "></i>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </footer>
-    </div>
-
-
+    {% endfor %} 
 </div>
 </div>
 
 
-{% endblock %} {% block 'js'%} {% endblock%}
+{% endblock %} 
+{% block 'js'%} {% endblock%}

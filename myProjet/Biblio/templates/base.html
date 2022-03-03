@@ -16,6 +16,41 @@
 
 <body>
     {%block 'bodyTitle' %}{% endblock %}
+    <div class=" container-fluid bg-dark w-100 h-15">
+        <div class="row justify-content-center">
+            <nav class="navbar bg-dark navbar-expand-sm navbar-dark">
+                <div class="col-4 col-lg-6 text-center">
+                    <a href="{% url 'home' %}" class="navbar-brand mx-5">
+                        <span class="text-gray-400 hover:text-white"><i class="fa-solid fa-book"></i> LIBRARY</span>
+                    </a>
+                </div>
+                <div class="col text-center mx-5 lg:text-lg">
+                    <ul class="navbar-nav">
+                        <li class="nav-item active">
+                            <a href="{% url 'home' %}" class="nav-link mx-3">
+                                <span class="text-gray-400 hover:text-white hover:break-after-column">bibliotheque</span>
+                            </a>
+                        </li>
+                        <li class="nav-item active">
+                            <a href="{% url 'home' %}" class="nav-link mx-3">
+                                <span class="text-gray-400 hover:text-white"></span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'home' %}" class="nav-link mx-3">
+                                <span class="text-gray-400 hover:text-white">Se connecter</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'inscription' %}" class="nav-link mx-3">
+                                <span class="text-gray-400 hover:text-white">S'inscrire</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </div>
     {%block 'content' %}{% endblock %}
   
 

@@ -26,7 +26,13 @@ les corrections {% for correction in corrections %}
     <div class="card-body">
         <h4 class="card-title">correction <strong>{{ correction.id }}</strong></h4>
         <p> Intitulet : <strong>{{ correction.intitulet }}</strong> </p>
+        <a name="" id="" class="btn btn-primary" href="/biblio/read/{{ correction.file }}" class="btn btn-primary">Read</a>
         <a name="" id="" class="btn btn-primary" href="/biblio/download/{{ correction.file }}" class="btn btn-primary">Download</a>
+        {%if correction.id_user_id == request.user.id %}
+        <a name="" id="" class="btn btn-primary" href="update/{{ correction.id }}" class="btn btn-primary">Update</a>
+        {%endif%}
     </div>
+      
+       
 </div>
 {%endfor %} {% endblock %} {% block 'js'%} {% endblock%}

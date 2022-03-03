@@ -12,7 +12,7 @@ from .forms import *
 # Create your views here.
 class LoginView(TemplateView):
 
-  template_name = 'index.html'
+  template_name = 'login.html'
 
   def post(self, request, **kwargs):
 
@@ -25,10 +25,9 @@ class LoginView(TemplateView):
 
     return render(request, self.template_name)
 
-
 class LogoutView(TemplateView):
 
-  template_name = 'index.html'
+  template_name = 'login.html'
 
   def get(self, request, **kwargs):
 
@@ -148,40 +147,50 @@ def changePassword_user(request,*args,**kwargs):
 
 ##################################################################################
 def add_epreuve(request, **kwargs):
-    template_name = '#.html' ###Template de add epreuve
-
+    template_name = 'add_epreuve.html' ###Template de add epreuve
+    
     current_user = request.user
     obj = get_object_or_404(
         User,pk=current_user.id,
-        # pk=kwargs.get('pk'),
     )
-
+    
     objet = Epreuve()
     
-    form = EpreuveForm(request.POST, request.FILES)
-    if form.is_valid():
-        print(form.cleaned_data)
-        objet.intitulet = form.cleaned_data.get('intitulet')
-        objet.matiere = form.cleaned_data.get('matiere')
-        objet.filiere = form.cleaned_data.get('filiere')
-        objet.professeur = form.cleaned_data.get('professeur')
-        objet.file = form.cleaned_data.get('file')
-        objet.id_user = obj.id
-        objet.save()
-        return HttpResponseRedirect("/#") ###Template de view epreuve
-
-    context = {
-        'form': form,
-    }
-            
-    return render(
+    if request.method == 'GET':
+        form = EpreuveForm(
+            initial={
+              
+            }
+        )
+        context = {
+            'form': form
+        }
+        return render(
             request=request,
             template_name=template_name,
             context=context
         )
+    
+    if request.method == 'POST':
+        form = EpreuveForm(request.POST, request.FILES)
+        context = {
+            'form': form,
+        }
+        if form.is_valid():
+            print(form.cleaned_data)
+            objet.intitulet = form.cleaned_data.get('intitulet')
+            objet.matiere = form.cleaned_data.get('matiere')
+            objet.filiere = form.cleaned_data.get('filiere')
+            objet.professeur = form.cleaned_data.get('professeur')
+            objet.file = request.FILES['file']
+            objet.id_user = obj
+            objet.save(force_insert=True)
+            return redirect('index')
+        return render(request=request,template_name=template_name,context=context,)
 
 def add_correction(request, **kwargs):
-    template_name = '#.html' ###Template de add correction
+    template_name = 'add_correction.html' ###Template de add correction
+    
     current_user = request.user
     obj1 = get_object_or_404(
         User,pk=current_user.id,
@@ -189,36 +198,49 @@ def add_correction(request, **kwargs):
 
     obj = get_object_or_404(
         Epreuve,
-        pk = kwargs.get('pk')
+        pk = kwargs.get('pk'),
     )
     objet = Correction()
-    epreuve = Epreuve.objects.filter(id=obj.id)
-    
-    form = CorrectionForm(request.POST, request.FILES or None)
-    if form.is_valid():
-        print(form.cleaned_data)
-        objet.intitulet = form.cleaned_data.get('intitulet')
-        objet.file = form.cleaned_data.get('file')
-        objet.id_user = obj1.id
-        objet.id_epreuve = epreuve.values().get()['id']
-        objet.save()
-        return HttpResponseRedirect("/#") ###Template de view correction
-
-    context = {
-        'epreuve': epreuve,
-        'form': form,
-    }
-            
-    return render(
+  
+    if request.method == 'GET':
+        form = CorrectionForm(
+            initial={
+            }
+        )
+        context = {
+            'form': form
+        }
+        return render(
             request=request,
             template_name=template_name,
             context=context
         )
+    if request.method == 'POST':
+        form = CorrectionForm(
+            request.POST,
+            request.FILES,
+            initial={
+            }
+        )
+        context = {
+            'form': form
+        }
+        if form.is_valid():
+            print(form.cleaned_data)
+            objet.intitulet = form.cleaned_data.get('intitulet')
+            objet.file = request.FILES['file']
+            objet.id_user = obj1
+            objet.id_epreuve = obj
+            objet.save()
+            return redirect('index')
+        return render(request=request,template_name=template_name,context=context,)
 
 def list_epreuve(request):
     template_name = 'biblio.html' #######Template de view epreuve
     epreuves = Epreuve.objects.all()
+    corrections = Correction.objects.all()
     context ={
+        'corrections' : corrections,
         'epreuves' : epreuves,
     }
          
@@ -234,7 +256,7 @@ def list_correction(request):
     return render(request=request, template_name=template_name, context=context)
 ##
 def index(request):
-    template_name = 'biblio.html'  ###Template de view correction
+    template_name = 'index.html'  ###Template de view correction
     corrections = Correction.objects.all()
     epreuves = Epreuve.objects.all()
     context ={
@@ -243,7 +265,7 @@ def index(request):
     }
     return render(request=request, template_name=template_name, context=context)
 
-def correction_byId(request, **kwargs):
+def correction_byEpreuveId(request, **kwargs):
     template_name = 'correction.html'  ###Template de view correction
     obj = get_object_or_404(
         Epreuve,
@@ -257,7 +279,7 @@ def correction_byId(request, **kwargs):
     return render(request=request, template_name=template_name, context=context)
 ##
 def update_epreuve(request, *args, **kwargs):
-    template_name = '#.html' ###Template de update epreuve
+    template_name = 'update_document.html' ###Template de update epreuve
     obj = get_object_or_404(
         Epreuve,
         pk = kwargs.get('pk')
@@ -268,7 +290,7 @@ def update_epreuve(request, *args, **kwargs):
                 'intitulet': obj.intitulet,
                 'matiere': obj.matiere,
                 'filiere': obj.filiere,
-                'profeseur': obj.professeur,
+                'professeur': obj.professeur,
                 'file': obj.file,
             }
         )
@@ -285,12 +307,7 @@ def update_epreuve(request, *args, **kwargs):
             request.POST,
             request.FILES,
             initial={
-                'intitulet': obj.intitulet,
-                'matiere': obj.matiere,
-                'filiere': obj.filiere,
-                'profeseur': obj.professeur,
-                'file': obj.file,
-            }
+               }
         )
         context = {
             'form': form
@@ -301,7 +318,7 @@ def update_epreuve(request, *args, **kwargs):
             obj.matiere = form.cleaned_data.get('matiere')
             obj.filiere = form.cleaned_data.get('filiere')
             obj.professeur = form.cleaned_data.get('professeur')
-            obj.file = form.cleaned_data.get('file')
+            obj.file = request.FILES['file']
             obj.save()
             return HttpResponseRedirect("/#") ###Template de view epreuve
         return render(
@@ -311,13 +328,13 @@ def update_epreuve(request, *args, **kwargs):
         )
 
 def update_correction(request, *args, **kwargs):
-    template_name = '#.html' ###Template de update correction
+    template_name = 'update_document.html' ###Template de update correction
     obj = get_object_or_404(
         Correction,
         pk = kwargs.get('pk')
     )
     if request.method == 'GET':
-        form = EpreuveForm(
+        form = CorrectionForm(
             initial={
                 'intitulet': obj.intitulet,
                 'file': obj.file,
@@ -331,13 +348,13 @@ def update_correction(request, *args, **kwargs):
             template_name=template_name,
             context=context
         )
+        
     if request.method == 'POST':
-        form = EpreuveForm(
+        form = CorrectionForm(
             request.POST,
             request.FILES,
             initial={
-                'intitulet': obj.intitulet,
-                'file': obj.file,
+                
             }
         )
         context = {
@@ -346,14 +363,9 @@ def update_correction(request, *args, **kwargs):
         if form.is_valid():
             print(form.cleaned_data)
             obj.intitulet = form.cleaned_data.get('intitulet')
-            obj.file = form.cleaned_data.get('file')
+            obj.file = request.FILES['file']
             obj.save()
             return HttpResponseRedirect("/#") ###Template de view correction
-        return render(
-            request=request,
-            template_name=template_name,
-            context=context
-        )
 
 def delete_epreuve(request, *args, **kwargs):
     template_name = '#.html'  ###Template de suppression 
