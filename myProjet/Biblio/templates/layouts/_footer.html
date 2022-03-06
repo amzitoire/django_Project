@@ -2,7 +2,7 @@
       <div class="container">
         <footer class="py-5 hidden-print">
           <div class="row">
-              <div class="col-6 col-lg-4 mb-sm-5">
+              <div class="col-6 col-lg-3 mb-sm-5">
                   <h5 class="ml-3">Liens Utiles</h5>
                   <ul class="nav flex-column">
                       <li class="nav-item">
@@ -23,7 +23,7 @@
                       </li>
                   </ul>
               </div>
-              <div class="col-6 col-lg-4 mb-sm-5">
+              <div class="col-6 col-lg-3 mb-sm-5">
                   <h5 class="ml-3">Autres</h5>
                   <ul class="nav flex-column">
                       <li class="nav-item">
@@ -50,24 +50,19 @@
                       </li>
                   </ul>
               </div>
-              <div id="newsletter-form-wrapper" class="mb-5">
+              <div class="mb-5 col-lg-6">
                   <h4 class="mb-1"><i class="fa fa-bell-o"></i> Recevez toute l'actualité du site dans votre boîte
-                      mail!</h4>
-                  <form action="https://parlonscode.com/newsletter-subscriptions" method="POST">
-                      <input type="hidden" name="_token" value="DMN3HTgug2LzDJYzd26xtPGJ1WHH99JE0SAFgy1b">
+                      mail !</h4>
+                  <form action="" method="POST">
                       <div class="form-group ">
                           <div class="row">
                               <div class="col-lg-6">
-                                  <input type="email" name="newsletter_subscriber_email"
-                                      id="newsletter_subscriber_email"
-                                      placeholder="Veuillez entrer votre adresse email" class="form-control" value=""
+                                  <input type="email" placeholder="Veuillez entrer votre adresse email" class="form-control" value=""
                                       required="required">
                               </div>
-                              <div class="col-lg-3">
-                                  <a href="#" class="btn btn-primary"><i class="fa fa-envelope"></i> S'abonner à la
+                              <div class="mt-3 mt-lg-0 col-lg-4">
+                                  <a href="#" class="btn text-white bg-red-800 hover:bg-slate-800"><i class="fa fa-envelope"></i> S'abonner à la
                                       newsletter</a>
-                                  <!-- <button type="button" class="btn btn-primary btn--shadow">
-                                      <i class="fa fa-envelope"></i> S'abonner à la newsletter</button> -->
                               </div>
                           </div>
                       </div>
@@ -79,10 +74,10 @@
               <hr>
               <div class="col-10">
                   <p class="copyright text-gray-400 text-center mb-1 my-3">
-                      Conçu avec <span class="text-xl text-pink-300">&hearts;</span>
+                      Conçu avec <span class="text-2xl text-pink-400">&hearts;</span>
                       et beaucoup de <i class="fa fa-coffee" style="color: #ccc;"></i>
-                      sur <span>Django</span>
-                      &middot; &copy; Copyright 2022 . Tous Droits Réservés.
+                      sur <span>Djangop</span>
+                      &middot; &copy; Copyright {%now 'Y'  %} &middot; Tous Droits Réservés.
                   </p>
               </div>
               <div class="col my-3">

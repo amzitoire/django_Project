@@ -1,35 +1,72 @@
-<div class=" container-fluid bg-dark w-100 h-15">
+<div class=" container-fluid bg-dark w-100 h-15 fixed-top">
     <div class="row justify-content-center">
-        <nav class="navbar bg-dark navbar-expand-sm navbar-dark">
-            <div class="col-4 col-lg-6 text-center">
+        <nav class="navbar bg-gray-800 navbar-expand-sm navbar-dark">
+            {% if user.is_authenticated %}
+            <div class="col-3 col-lg-4 justify-content-start mr-3 text-center">
                 <a href="{% url 'home' %}" class="navbar-brand mx-5">
                     <span class="text-gray-400 hover:text-white"><i class="fa-solid fa-book"></i> eLIBRARY</span>
                 </a>
             </div>
-            <div class="col text-center mx-5 lg:text-lg">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="justify-content-center lg:justify-content-end lg:text-lg collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav">
                     <li class="nav-item active">
-                        <a href="{% url 'home' %}" class="nav-link mx-3">
+                        <a href="{% url 'dashboard' %}" class="nav-link mx-3">
                             <span class="text-gray-400 hover:text-white hover:break-after-column">Dashboard</span>
                         </a>
                     </li>
                     <li class="nav-item active">
-                        <a href="{% url 'home' %}" class="nav-link mx-3">
+                        <a href="{% url 'new_post' %}" class="nav-link mx-3">
                             <span class="text-gray-400 hover:text-white">Poster</span>
                         </a>
                     </li>
+                </ul>
+                <div class="dropdown offset-4 offset-lg-7">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa-solid fa-user"></i>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <li><a class="dropdown-item" href="{% url 'profil' %}"> Profil</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="{% url 'logout' %}">Déconnexion</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            {% else %}
+            <div class="col-lg-6 col-lg-4 text-center">
+                <a href="{% url 'home' %}" class="navbar-brand mx-5">
+                    <span class="text-gray-400 hover:text-white"><i class="fa-solid fa-book"></i> eLIBRARY</span>
+                </a>
+            </div>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="col justify-content-end text-center mx-5 lg:text-lg collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav">
                     <li class="nav-item">
                         <a href="{% url 'login' %}" class="nav-link mx-3">
-                            <span class="text-gray-400 hover:text-white">Login</span>
+                            <span class="text-gray-400 hover:text-white">Se connecter</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="{% url 'inscription' %}" class="nav-link mx-3">
-                            <span class="text-gray-400 hover:text-white">Sign up</span>
+                            <span class="text-gray-400 hover:text-white">S'inscrire</span>
                         </a>
                     </li>
                 </ul>
             </div>
+
+            {% endif %}
         </nav>
     </div>
 </div>

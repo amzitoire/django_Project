@@ -30,3 +30,6 @@ class CustomUserAdmin(UserAdmin):
 admin.site.register(User, CustomUserAdmin)
 admin.site.register(Epreuve)
 admin.site.register(Correction)
+admin.site.site_header = "eLibrary Administration"
+
+admin.site.site_title ="eLibrary"

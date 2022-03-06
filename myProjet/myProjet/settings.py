@@ -139,8 +139,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #user
 AUTH_USER_MODEL = 'Biblio.User'
 
-LOGIN_REDIRECT_URL = '/biblio/'
-LOGIN_URL = '/'
+# Après la connexion la redirection par défaut est vers le dashboard
+LOGIN_REDIRECT_URL = 'dashboard'
+
+# Sans connexion il m'envoie vers la page de connexion
+LOGIN_URL = 'login'
 
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'

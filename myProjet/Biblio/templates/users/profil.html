@@ -1,0 +1,31 @@
+{% extends 'layouts/base.html' %}
+
+{% load static %}
+
+{%block css %}
+<!-- <link rel="stylesheet" href="{% static 'css/style.css' %}"> -->
+{% endblock %}
+
+{% block title %} Dashboard {% endblock %}
+
+{%block content %}
+
+<h1>Profil {{ user.password }} </h1>
+<div class="container mt-5 mb-5">
+    <div class="row">
+        <div class="col">
+            <a href="{% url 'password' %}" class="btn btn-success">Changer votre mot de passe</a>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-xl mt-3 rounded">
+                <div class="align-items-center p-2 text-center">
+                    <img src="{% static 'images/dev.png' %}" alt="" class="card-img-top rounded" width="160">
+                    <div class="card-body mt-3 info">
+                        <h5 class="card-title"><strong>{{ user.login }}</strong></h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

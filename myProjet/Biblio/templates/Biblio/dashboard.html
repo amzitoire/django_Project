@@ -1,37 +1,54 @@
 {% extends 'layouts/base.html' %}
-{% block title} Dlashboard {%block %}
 
-{% block title} {%block %}
+{% load static %}
+
+{%block css %}
+<!-- <link rel="stylesheet" href="{% static 'css/style.css' %}"> -->
+{% endblock %}
+
+{% block title %} Dashboard {% endblock %}
 
 {%block content %}
-{% for epreuve in epreuves %}
-<div class="card text-left col-3">
-    <img class="card-img-top" src="holder.js/100px180/" alt="">
-    <div class="card-body">
-        <h4 class="card-title">Epreuve <strong>{{ epreuve.id }}</strong></h4>
-        <p> Intitulet : <strong>{{ epreuve.intitulet }}</strong> </p>
-        <p> Matiere : <strong>{{ epreuve.matiere }}</strong> </p>
-        <p> Filiere : <strong>{{ epreuve.filiere}}</strong></p>
-        <p>Professeur : <strong>{{ epreuve.professeur }}</strong> </p>
-        <a name="" id="" class="btn btn-primary" href="/biblio/download/{{ epreuve.file }}"
-            class="btn btn-primary">Download</a>
-        <a name="" id="" class="btn btn-primary" href="#" role="button">Ajouter correction</a>
-        <a name="" id="" class="btn btn-primary" href="correction/{{epreuve.id}}" role="button">Corrections</a>
+<div class="container mt-5">
+    <div class="row"></div>
+</div>
+<div class="container mt-5 mb-5">
+    <div class="row row-cols-3 row-cols-lg-4">
+        {% for epreuve in epreuves %}
+        <div class="col">
+            <div class="card shadow-xl mt-3 rounded">
+                <div class="align-items-center p-2 text-center">
+                    <img src="{% static 'images/dev.png' %}" alt="" class="card-img-top rounded" width="160">
+                    <div class="card-body mt-3 info">
+                        <h5 class="card-title"><strong>{{ epreuve.id }}.{{ epreuve.intitulet }}</strong></h5>
+                        <p class="text-start"><strong> Matiere: </strong>
+                            {{ epreuve.matiere | truncatechars:"10" }}</p>
+                        <p class="text-start"><strong>Filiere:</strong> {{epreuve.filiere }} </p>
+                        <p class="text-start"> <strong><i class="fa-solid fa-chalkboard-user"></i></strong>
+                            {{ epreuve.professeur }}</p>
+                        <div class="row my-3">
+                            <a href="/biblio/read/{{ epreuve.file }}" class="btn-sm btn-lg btn-primary col-4 mr-3">Read</a>
+                            <a href="/biblio/download/{{ epreuve.file }}" class="btn-sm btn-info col-5">Download</a>
+                        </div>
+                        <div class="row mb-3">
+                            <a href="{% url 'update_epreuve' epreuve.id %}" class="btn-sm btn-success col-4 mr-3">UpdateE</a>
+                            <a href="{% url 'delete_epreuve' epreuve.id %}" class="btn-sm btn-danger col-5">Delete</a>
+                        </div>
+                        {% for correction in corrections %}
+                        <div class="row mb-3">
+                            <a href="{% url 'update_correction' epreuve.id %}" class="btn-sm btn-success col-4 mr-3">UpdateC</a>
+                            <a href="{% url 'corrections' epreuve.id %}" class="btn-sm btn-warning col">All correction</a>
+                        </div>  
+                        <div class="row">
+                            <a href="{% url 'delete_correction' epreuve.id %}" class="btn-sm btn-danger col-4 mr-3">DeleteC</a>
+                            <a href="{% url 'add_correction' epreuve.id %}" class="btn-sm btn-warning col">Add correction</a>
+                        </div>  
+                        {%endfor%}               
+                     </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
     </div>
 </div>
-{%endfor%}
-
-{% for correction in corrections %}
-<div class="card text-left col-3">
-    <img class="card-img-top" src="holder.js/100px180/" alt="">
-    <div class="card-body">
-        <h4 class="card-title">Epreuve <strong>{{ correction.id }}</strong></h4>
-        <p> Intitulet : <strong>{{ correction.intitulet }}</strong> </p>
-        <a name="" id="" class="btn btn-primary" href="/biblio/download/{{ epreuve.file }}"
-            class="btn btn-primary">Download</a>
-        <a name="" id="" class="btn btn-primary" href="#" role="button">Ajouter correction</a>
-        <a name="" id="" class="btn btn-primary" href="correction/{{epreuve.id}}" role="button">Corrections</a>
-    </div>
-</div>
-{%endfor%}
 {% endblock %}

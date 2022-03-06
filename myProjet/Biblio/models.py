@@ -76,6 +76,11 @@ class Epreuve(Super):
     professeur = models.CharField(max_length=200)
     id_user= models.ForeignKey(User, on_delete=models.CASCADE)
 
+    # def __str__(self):
+    #     return self.matiere
+
+    def get_url(self):
+        return reverse(kwargs={'pk':self.id})
     
    
     
@@ -84,5 +89,7 @@ class Correction(Super):
     id_epreuve= models.OneToOneField(Epreuve, on_delete=models.CASCADE)
     id_user= models.ForeignKey(User, on_delete=models.CASCADE)
     
+    def get_url(self):
+        return reverse(kwargs={'pk':self.id})
 
 # Create your models here.
