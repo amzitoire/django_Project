@@ -58,12 +58,12 @@ class CustomUserCreationForm(UserCreationForm,forms.Form):
 
 
 class CustomUserChangeForm(UserChangeForm,forms.Form):
-    username = forms.CharField(label='', max_length=200, strip=True, min_length=2,
-         widget=forms.PasswordInput(
+    username = forms.EmailField(label='', max_length=200, min_length=2,
+         widget=forms.EmailInput(
             attrs={
-                'type':'password',
+                'type':'email',
                 'class': 'form-control',
-                'placeholder': 'Ancien mot de passe',
+                'placeholder': 'Nouveau email',
             }
         )
     )

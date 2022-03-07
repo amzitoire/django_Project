@@ -18,8 +18,21 @@
         <div class="col">
             <div class="card shadow-xl mt-3 rounded">
                 <div class="align-items-center p-2 text-center">
-                    <img src="{% static 'images/dev.png' %}" alt="" class="card-img-top rounded" width="160">
-                    <div class="card-body mt-3 info">
+                    {% if epreuve.matiere == "Java" %}
+                    <img src="{% static 'images/java.png' %}" alt="" class="card-img-top rounded" width="160">
+                    {% elif epreuve.matiere == "Java EE" %}
+                        <img src="{% static 'images/jee.png' %}" alt="" class="card-img-top rounded" width="160">
+                    {%elif epreuve.matiere == "Django" %}
+                        <img src="{% static 'images/django.png' %}" alt="" class="card-img-top rounded" width="160">
+                    {%elif epreuve.matiere == "Test et Logiciels" %}
+                        <img src="{% static 'images/test_logiciel.png' %}" alt="" class="card-img-top rounded" width="160">
+                    {%elif epreuve.matiere == "Php" %}
+                        <img src="{% static 'images/php.png' %}" alt="" class="card-img-top rounded" width="160">
+                    {%elif epreuve.matiere == "Angular" %}
+                        <img src="{% static 'images/angular.png' %}" alt="" class="card-img-top rounded" width="160">
+                    {%else%}
+                    <img src="{% static 'images/computer.png' %}" alt="" class="card-img-top rounded" width="160">
+                    {% endif %}                    <div class="card-body mt-3 info">
                         <h5 class="card-title"><strong>{{ epreuve.id }}.{{ epreuve.intitulet }}</strong></h5>
                         <p class="text-start"><strong> Matiere: </strong>
                             {{ epreuve.matiere | truncatechars:"10" }}</p>

@@ -24,7 +24,7 @@
                 {% if form.subject.errors %}
                     {% for error in form.subject.errors %}
                         <p class="text-danger"><strong>{{ error }}</strong></p>
-                    {% endfor %}
+                       {% endfor %}
                 {% endif %}
 
                 {% csrf_token %}
@@ -50,5 +50,4 @@
         </div>
     </div>
 </div>
-
 {% endblock %}
