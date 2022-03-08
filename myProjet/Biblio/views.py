@@ -145,7 +145,6 @@ def changePassword_user(request,*args,**kwargs):
           return redirect('home')
         return render(request=request,template_name=template_name,context=context,)
 
-##################################################################################
 def add_epreuve(request, **kwargs):
     template_name = 'add_epreuve.html' ###Template de add epreuve
     
@@ -254,7 +253,7 @@ def list_correction(request):
     }
          
     return render(request=request, template_name=template_name, context=context)
-##
+
 def index(request):
     template_name = 'index.html'  ###Template de view correction
     corrections = Correction.objects.all()
@@ -277,7 +276,7 @@ def correction_byEpreuveId(request, **kwargs):
     }
          
     return render(request=request, template_name=template_name, context=context)
-##
+
 def update_epreuve(request, *args, **kwargs):
     template_name = 'update_document.html' ###Template de update epreuve
     obj = get_object_or_404(
@@ -366,7 +365,7 @@ def update_correction(request, *args, **kwargs):
             obj.file = request.FILES['file']
             obj.save()
             return HttpResponseRedirect("/#") ###Template de view correction
-
+#ne pa toucher front
 def delete_epreuve(request, *args, **kwargs):
     template_name = '#.html'  ###Template de suppression 
     obj = get_object_or_404(
@@ -394,8 +393,7 @@ def delete_correction(request, *args, **kwargs):
         request=request,
         template_name=template_name
         )
-    ########################
-  
+##
 def download(request, *args, **kwargs):
     path=kwargs.get('path')
     file_path = "files/" + path
