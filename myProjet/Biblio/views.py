@@ -13,7 +13,7 @@ from .forms import *
 # Create your views here.
 
 def index(request):
-    template_name = 'pages/home.html'  ###Template de view correction
+    template_name = 'Biblio/dashboard'  ###Template de view correction
     corrections = Correction.objects.all()
     epreuves = Epreuve.objects.all()
     context ={
@@ -37,29 +37,27 @@ def using(request, *args, **kwargs):
 def profil(request):
     return render(request, 'users/profil.html' )
 
-#### Utilisateurs
-# class LoginView(TemplateView):
+# Utilisateurs
+class LoginView(TemplateView):
 
-#   template_name = 'users/login.html'
+  template_name = 'users/login.html'
 
-#   def post(self, request, **kwargs):
-#     username = request.POST.get('username', False)
-#     password = request.POST.get('password', False)
-#     user = authenticate(username=username, password=password)
-#     if user is not None and user.is_active:
-#         login(request, user)
-#         return HttpResponseRedirect( settings.LOGIN_REDIRECT_URL )
+  def post(self, request, **kwargs):
+    username = request.POST.get('username', False)
+    password = request.POST.get('password', False)
+    user = authenticate(username=username, password=password)
+    if user is not None and user.is_active:
+        login(request, user)
+        return HttpResponseRedirect( settings.LOGIN_REDIRECT_URL )
 
-#     return render(request, self.template_name)
-
+    return render(request, self.template_name)
 
 class LogoutView(TemplateView):
 
-  template_name = 'pages/home.html'
+  template_name = 'users/login.html'
 
   def get(self, request, **kwargs):
     logout(request)
-    # return HttpResponseRedirect( 'pages/home.html' )
     return render(request, self.template_name)
   
 def create_user(request,*args,**kwargs):
@@ -170,9 +168,10 @@ def changePassword_user(request,*args,**kwargs):
           return redirect('home')
         return render(request=request,template_name=template_name,context=context,)
 
-##################################################################################
+# Epreuve
 
 def add_epreuve(request, **kwargs):
+    
     template_name = 'Biblio/add_epreuve.html' ###Template de add epreuve
     
     current_user = request.user
@@ -214,16 +213,20 @@ def add_epreuve(request, **kwargs):
             return redirect('dashboard')
         return render(request=request,template_name=template_name,context=context,)
 
+
+         
+    return render(request=request, template_name=template_name, context=context)
+
 def list_epreuve(request):
     # Liste des épreuve les plus récentesS
+    template_name = 'Biblio/dashboard.html'
     epreuves = Epreuve.objects.order_by('-id').all()
-    corrections = list_correction(request)
+    corrections = Correction.objects.order_by('-id').all()
     context ={
         'epreuves' : epreuves,
         'corrections': corrections,
-    }
-         
-    return render(request, 'Biblio/dashboard.html', context)
+    }    
+    return render(request=request, template_name=template_name, context=context)
 
 def details_epreuve(request, pk):
     template_name = 'Biblio/details.html'  ###Template de view correction
@@ -288,16 +291,16 @@ def delete_epreuve(request, *args, **kwargs):
         Epreuve,
         pk = kwargs.get('pk')
     )
-    # if request.method =="POST":
-    obj.delete()
-    return redirect("dashboard") ###Template de view epreuve
+    if request.method =="POST":
+        obj.delete()
+        return redirect("dashboard") ###Template de view epreuve
     return render(
         request=request,
         template_name=template_name
         )
 
-
 #### Correction
+
 def add_correction(request, **kwargs):
     template_name = 'Biblio/add_correction.html' ###Template de add correction
     current_user = request.user
@@ -307,104 +310,102 @@ def add_correction(request, **kwargs):
 
     obj = get_object_or_404(
         Epreuve,
-        pk = kwargs.get('pk')
+        pk = kwargs.get('pk'),
     )
     objet = Correction()
-    epreuve = Epreuve.objects.filter(id=obj.id)
-    
-    form = CorrectionForm(request.POST, request.FILES or None)
-    if form.is_valid():
-        print(form.cleaned_data)
-        objet.intitulet = form.cleaned_data.get('intitulet')
-        objet.file = form.cleaned_data.get('file')
-        objet.id_user = obj1.id
-        objet.id_epreuve = epreuve.values().get()['id']
-        objet.save()
-        return HttpResponseRedirect("Biblio/dashboard.html") ###Template de view correction
-
-    context = {
-        'epreuve': epreuve,
-        'form': form,
-    }
-            
-    return render(
+    if request.method == 'GET':
+        form = CorrectionForm(
+            initial={
+            }
+        )
+        context = {
+            'form': form
+        }
+        return render(
             request=request,
             template_name=template_name,
             context=context
         )
-
-
+        
+    if request.method == 'POST':
+        form = CorrectionForm(
+            request.POST,
+            request.FILES,
+            initial={
+            }
+        )
+        context = {
+            'form': form
+        }
+        if form.is_valid():
+            print(form.cleaned_data)
+            objet.intitulet = form.cleaned_data.get('intitulet')
+            objet.file = request.FILES['file']
+            objet.id_user = obj1
+            objet.id_epreuve = obj
+            objet.save()
+            return redirect('index')
+        return render(request=request,template_name=template_name,context=context,)
 
 def list_correction(request, **kwargs):
     template_name = 'Biblio/correction.html'  ###Template de view correction
     corrections = Correction.objects.order_by('-id').all()
     context ={
         'corrections' : corrections,
-    }
-         
+    }  
     return render(request=request, template_name=template_name, context=context)
-##
-
 
 def correction_byId(request, **kwargs):
     template_name = 'Biblio/view_correction.html'  ###Template de view correction
+
+def correction_byEpreuveId(request, **kwargs):
+    template_name = 'Biblio/correction.html'  ###Template de view correction
     obj = get_object_or_404(
         Epreuve,
         pk = kwargs.get('pk')
     )
-    corrections = Correction.objects.filter(id_epreuve=obj.id)
+    corrections = Correction.objects.filter(id_epreuve=obj.id).order_by('-id')
     context ={
         'corrections' : corrections,
     }
          
     return render(request=request, template_name=template_name, context=context)
-##
-
 
 def update_correction(request, *args, **kwargs):
     template_name = 'Biblio/update_correction.html' ###Template de update correction
     obj = get_object_or_404(
-        Correction,
-        pk = kwargs.get('pk')
-    )
+            Correction,
+            pk = kwargs.get('pk')
+        )
     if request.method == 'GET':
         form = CorrectionForm(
             initial={
                 'intitulet': obj.intitulet,
                 'file': obj.file,
-            }
+                }
         )
-
-        context = { 'form': form }
-        
+        context = { 'form': form }   
         return render(
             request=request,
             template_name=template_name,
             context=context
-        )
+            )
+            
     if request.method == 'POST':
         form = CorrectionForm(
-            request.POST,
-            request.FILES,
-            initial={
-                'intitulet': obj.intitulet,
-                'file': obj.file,
-            }
-        )
-
+                request.POST,
+                request.FILES,
+                initial={
+                    
+                }
+            )
         context = { 'form': form }
-
         if form.is_valid():
-            print(form.cleaned_data)
-            obj.intitulet = form.cleaned_data.get('intitulet')
-            obj.file = form.cleaned_data.get('file')
-            obj.save()
-            return HttpResponseRedirect("Biblio/dashboard.html") ###Template de view correction
-        return render(
-            request=request,
-            template_name=template_name,
-            context=context
-        )
+                print(form.cleaned_data)
+                obj.intitulet = form.cleaned_data.get('intitulet')
+                obj.file = request.FILES['file']
+                obj.save()
+                return HttpResponseRedirect("Biblio/dashboard") ###Template de view correction
 
 def delete_correction(request, *args, **kwargs):
     template_name = 'Biblio/delete_epreuve.html' ######Template de suppression
@@ -420,11 +421,9 @@ def delete_correction(request, *args, **kwargs):
         template_name=template_name
         )
     
-    
-########################
-# @login_required(redirect_field_name='Biblio/dashboard.html')
+#download
+
 def download(request, *args, **kwargs):
-    template_name = 'Biblio/dashboard.html'  ###Template de view correction
     path=kwargs.get('path')
     file_path = "files/" + path
     if os.path.exists(file_path):
@@ -433,6 +432,6 @@ def download(request, *args, **kwargs):
             response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
             return response
         
-    return HttpResponseRedirect( settings.LOGIN_REDIRECT_URL )
+    # return HttpResponseRedirect( settings.LOGIN_REDIRECT_URL )
     raise Http404
-    
+

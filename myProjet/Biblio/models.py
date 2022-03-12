@@ -1,3 +1,4 @@
+import os
 from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
@@ -66,6 +67,10 @@ class Super(models.Model):
     intitulet = models.CharField(max_length=200)
     file = models.FileField(upload_to='files')
 
+    def delete(self, *args, **kwargs):
+        os.remove(str(self.file))
+        super().delete(*args, **kwargs)
+        
     class Meta:
         abstract = True
 

@@ -10,13 +10,12 @@
                 <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" href="/biblio/epreuve/ajout">add epreuve</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="/logout/">Logout</a>
             </li>
         </ul>
-        <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="text" placeholder="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-        </form>
     </div>
 </nav>
 <p>Vous êtes identifié!</p>
@@ -29,9 +28,21 @@ les epreuves {% for epreuve in epreuves %}
         <p> Matiere : <strong>{{ epreuve.matiere }}</strong> </p>
         <p> Filiere : <strong>{{ epreuve.filiere}}</strong></p>
         <p>Professeur : <strong>{{ epreuve.professeur }}</strong> </p>
+        <a name="" id="" class="btn btn-primary" href="/biblio/read/{{ epreuve.file }}" class="btn btn-primary">Read</a>
         <a name="" id="" class="btn btn-primary" href="/biblio/download/{{ epreuve.file }}" class="btn btn-primary">Download</a>
-        <a name="" id="" class="btn btn-primary" href="#" role="button">Ajouter correction</a>
+        {%if epreuve.id_user_id == request.user.id %}
+        <a name="" id="" class="btn btn-primary" href="epreuve/update/{{ epreuve.id }}" class="btn btn-primary">Update</a>
+        {%endif%}
+        {% for correction in corrections %}
+        {%if correction.id_epreuve_id != epreuve.id %}
+        <a name="" id="" class="btn btn-primary" href="correction/ajout/{{epreuve.id}}" role="button">Ajouter correction</a>
+        {% endif %}
+        {%endfor %}
+        {% for correction in corrections %}
+        {%if correction.id_epreuve_id == epreuve.id %}
         <a name="" id="" class="btn btn-primary" href="correction/{{epreuve.id}}" role="button">Corrections</a>
+        {% endif %}
+        {%endfor %}
     </div>
 </div>
 {%endfor %} {% endblock %} {% block 'js'%} {% endblock%}
