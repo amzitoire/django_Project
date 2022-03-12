@@ -37,6 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'Biblio',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -73,10 +76,21 @@ WSGI_APPLICATION = 'myProjet.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'biblio_db',#base de donnee
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': 'localhost',   # Or an IP Address that your DB is hosted on
+        'PORT': '3306',
     }
 }
 
@@ -121,3 +135,15 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+#user
+AUTH_USER_MODEL = 'Biblio.User'
+
+# Après la connexion la redirection par défaut est vers le dashboard
+LOGIN_REDIRECT_URL = 'dashboard'
+
+# Sans connexion il m'envoie vers la page de connexion
+LOGIN_URL = 'login'
+
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'

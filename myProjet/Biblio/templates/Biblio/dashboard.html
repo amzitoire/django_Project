@@ -1,0 +1,67 @@
+{% extends 'layouts/base.html' %}
+
+{% load static %}
+
+{%block css %}
+<!-- <link rel="stylesheet" href="{% static 'css/style.css' %}"> -->
+{% endblock %}
+
+{% block title %} Dashboard {% endblock %}
+
+{%block content %}
+<div class="container mt-5">
+    <div class="row"></div>
+</div>
+<div class="container mt-5 mb-5">
+    <div class="row row-cols-3 row-cols-lg-4">
+        {% for epreuve in epreuves %}
+        <div class="col">
+            <div class="card shadow-xl mt-3 rounded">
+                <div class="align-items-center p-2 text-center">
+                    {% if epreuve.matiere == "Java" %}
+                    <img src="{% static 'images/java.png' %}" alt="" class="card-img-top rounded" width="160">
+                    {% elif epreuve.matiere == "Java EE" %}
+                        <img src="{% static 'images/jee.png' %}" alt="" class="card-img-top rounded" width="160">
+                    {%elif epreuve.matiere == "Django" %}
+                        <img src="{% static 'images/django.png' %}" alt="" class="card-img-top rounded" width="160">
+                    {%elif epreuve.matiere == "Test et Logiciels" %}
+                        <img src="{% static 'images/test_logiciel.png' %}" alt="" class="card-img-top rounded" width="160">
+                    {%elif epreuve.matiere == "Php" %}
+                        <img src="{% static 'images/php.png' %}" alt="" class="card-img-top rounded" width="160">
+                    {%elif epreuve.matiere == "Angular" %}
+                        <img src="{% static 'images/angular.png' %}" alt="" class="card-img-top rounded" width="160">
+                    {%else%}
+                    <img src="{% static 'images/computer.png' %}" alt="" class="card-img-top rounded" width="160">
+                    {% endif %}                    <div class="card-body mt-3 info">
+                        <h5 class="card-title"><strong>{{ epreuve.id }}.{{ epreuve.intitulet }}</strong></h5>
+                        <p class="text-start"><strong> Matiere: </strong>
+                            {{ epreuve.matiere | truncatechars:"10" }}</p>
+                        <p class="text-start"><strong>Filiere:</strong> {{epreuve.filiere }} </p>
+                        <p class="text-start"> <strong><i class="fa-solid fa-chalkboard-user"></i></strong>
+                            {{ epreuve.professeur }}</p>
+                        <div class="row my-3">
+                            <a href="/biblio/read/{{ epreuve.file }}" class="btn-sm btn-lg btn-primary col-4 mr-3">Read</a>
+                            <a href="/biblio/download/{{ epreuve.file }}" class="btn-sm btn-info col-5">Download</a>
+                        </div>
+                        <div class="row mb-3">
+                            <a href="{% url 'update_epreuve' epreuve.id %}" class="btn-sm btn-success col-4 mr-3">UpdateE</a>
+                            <a href="{% url 'delete_epreuve' epreuve.id %}" class="btn-sm btn-danger col-5">Delete</a>
+                        </div>
+                        {% for correction in corrections %}
+                        <div class="row mb-3">
+                            <a href="{% url 'update_correction' epreuve.id %}" class="btn-sm btn-success col-4 mr-3">UpdateC</a>
+                            <a href="{% url 'corrections' epreuve.id %}" class="btn-sm btn-warning col">All correction</a>
+                        </div>  
+                        <div class="row">
+                            <a href="{% url 'delete_correction' epreuve.id %}" class="btn-sm btn-danger col-4 mr-3">DeleteC</a>
+                            <a href="{% url 'add_correction' epreuve.id %}" class="btn-sm btn-warning col">Add correction</a>
+                        </div>  
+                        {%endfor%}               
+                     </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

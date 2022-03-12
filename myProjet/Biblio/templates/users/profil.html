@@ -1,0 +1,46 @@
+{% extends 'layouts/base.html' %}
+
+{% load static %}
+
+{%block css %}
+<!-- <link rel="stylesheet" href="{% static 'css/style.css' %}"> -->
+{% endblock %}
+
+{% block title %} Dashboard {% endblock %}
+
+{%block content %}
+
+<h1>Profil {{ user.password }} </h1>
+<div class="container mt-5 mb-5">
+    <div class="row pt-5">
+        <div class="col flex justify-end">
+            <a href="{% url 'update' %}" class="btn btn-success">Modifier</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="card shadow-xl mt-3 rounded col">
+            <div class="p-2 text-center">
+                <span class="text-6xl"><i class="fa-solid fa-user"></i> </span>
+                <div class="card-body mt-3 info">
+                    <h5 class="card-title"><strong>E{{ request.user }}</strong></h5>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="card shadow-xl mt-3 rounded col">
+            <div class="align-items-center p-2 text-center">
+                  <span class="text-6xl"><i class="fa-solid fa-lock-keyhole"></i></span>
+                <div class="card-body mt-3 info">
+                    <h5 class="card-title"><strong>{{ request.user.password }}</strong></h5>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row py-3">
+        <div class="col flex justify-end">
+            <a href="{% url 'password' %}" class="btn btn-success">Changer votre mot de passe</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

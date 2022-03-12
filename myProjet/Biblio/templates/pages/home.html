@@ -1,0 +1,59 @@
+{% extends 'layouts/base.html' %}
+
+{% load static %}
+
+{% block title %} HomePage {% endblock %}
+
+
+{% block content %}
+
+<div class="container pt-4">
+    <div class="row bg-gray-100 my-5">
+        <div class="col py-5 text-center text-zinc-900 text-3xl">
+            <h1 class="text-slate-900">
+                Bienvenue sur eLibrary Venez visiter le meilleur lieu pour préparer vos épreuves
+            </h1>
+        </div>
+    </div>
+
+    <div class="container mt-5 mb-5">
+        <div class="row row-cols-3 row-cols-lg-4">
+            {% for epreuve in epreuves %}
+            <div class="col-md-4">
+                <div class="card shadow-xl mt-3 rounded">
+                    <div class="p-2 text-center">
+                        {% if epreuve.matiere == "Java" %}
+                            <img src="{% static 'images/java.png' %}" alt="" class="card-img-top rounded" width="160">
+                        {% elif epreuve.matiere == "Java EE" %}
+                            <img src="{% static 'images/jee.png' %}" alt="" class="card-img-top rounded" width="160">
+                        {%elif epreuve.matiere == "Django" %}
+                            <img src="{% static 'images/django.png' %}" alt="" class="card-img-top rounded" width="160">
+                        {%elif epreuve.matiere == "Test et Logiciels" %}
+                            <img src="{% static 'images/test_logiciel.png' %}" alt="" class="card-img-top rounded" width="160">
+                        {%elif epreuve.matiere == "Php" %}
+                            <img src="{% static 'images/php.png' %}" alt="" class="card-img-top rounded" width="160">
+                        {%elif epreuve.matiere == "Angular" %}
+                            <img src="{% static 'images/angular.png' %}" alt="" class="card-img-top rounded" width="160">
+                        {%else%}
+                        <img src="{% static 'images/computer.png' %}" alt="" class="card-img-top rounded" width="160">
+                        {% endif %}
+                        <div class="card-body mt-3 info">
+                        <h5 class="card-title"><strong>{{ epreuve.id }}.{{ epreuve.intitulet }}</strong></h5>
+                        <p class="card-text1 d-block"><strong> Matiere: </strong>
+                            {{ epreuve.matiere | truncatechars:"10" }}</p>
+                        <p class="card-text1 d-block"><strong>Filiere:</strong> {{epreuve.filiere }} </p>
+                        <p class="card-text1 d-block"> <i class="fa-solid fa-chalkboard-user"></i>
+                            {{ epreuve.professeur }}</p>
+                        <div class="mt-3">
+                            <a href="/biblio/read/{{ epreuve.file }}" class="btn btn-primary hover:shadow-xl">Read</a>
+                            <a href="/biblio/download/{{ epreuve.file }}" class="btn btn-warning">Download</a>
+                        </div>    
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
