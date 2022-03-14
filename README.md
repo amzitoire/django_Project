@@ -1,3 +1,9 @@
 # django_Project
-#kadidiatou diallo
+    #initialize project
+        #venv
+        #django_Project
+        #env
+    #import database
+        #
+    #test
 

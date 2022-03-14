@@ -70,7 +70,10 @@ class Super(models.Model):
     def delete(self, *args, **kwargs):
         os.remove(str(self.file))
         super().delete(*args, **kwargs)
-        
+    
+    def deleteFile(self, *args, **kwargs):
+        os.remove(str(self.file))
+       
     class Meta:
         abstract = True
 
@@ -81,6 +84,8 @@ class Epreuve(Super):
     professeur = models.CharField(max_length=200)
     id_user= models.ForeignKey(User, on_delete=models.CASCADE)
 
+    def get_url(self):
+        return reverse(kwargs={'pk':self.id})
     
    
     
@@ -89,5 +94,7 @@ class Correction(Super):
     id_epreuve= models.OneToOneField(Epreuve, on_delete=models.CASCADE)
     id_user= models.ForeignKey(User, on_delete=models.CASCADE)
     
+    def get_url(self):
+        return reverse(kwargs={'pk':self.id})
 
 # Create your models here.
