@@ -53,16 +53,13 @@
               <div class="mb-5 col-lg-6">
                   <h4 class="mb-1"><i class="fa fa-bell-o"></i> Recevez toute l'actualité du site dans votre boîte
                       mail !</h4>
-                  <form action="" method="POST">
+                  <form action="{% url 'newsletterTrue' %}" method="POST">
+                    {% csrf_token %}
                       <div class="form-group ">
                           <div class="row">
-                              <div class="col-lg-6">
-                                  <input type="email" placeholder="Veuillez entrer votre adresse email" class="form-control" value=""
-                                      required="required">
-                              </div>
                               <div class="mt-3 mt-lg-0 col-lg-4">
-                                  <a href="#" class="btn text-white bg-red-800 hover:bg-slate-800"><i class="fa fa-envelope"></i> S'abonner à la
-                                      newsletter</a>
+                                  <a class="btn text-white bg-red-800 hover:bg-slate-800"><button><i class="fa fa-envelope"></i> S'abonner à la
+                                    newsletter</button></a>
                               </div>
                           </div>
                       </div>
@@ -76,8 +73,8 @@
                   <p class="copyright text-gray-400 text-center mb-1 my-3">
                       Conçu avec <span class="text-2xl text-pink-400">&hearts;</span>
                       et beaucoup de <i class="fa fa-coffee" style="color: #ccc;"></i>
-                      sur <span>Djangop</span>
-                      &middot; &copy; Copyright {%now 'Y'  %} &middot; Tous Droits Réservés.
+                      sur <span>Django</span>
+                      &middot; &copy; Copyright {%now 'Y'  %} &middot; Tous Droits Réservés. @dar322
                   </p>
               </div>
               <div class="col my-3">

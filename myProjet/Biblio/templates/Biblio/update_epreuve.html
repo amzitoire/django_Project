@@ -16,7 +16,7 @@
         <div class="col px-5">
             <h1 class="text-dark fw-bold fs-1 text-center py-5">Modifier l'épreuve</h1>
             {% load crispy_forms_tags %}
-            <form method="post" action="" >
+            <form method="post" action="" novalidate enctype="multipart/form-data">
                 {% if form.subject.errors %}
                     {% for error in form.subject.errors %}
                         <p class="text-danger"><strong>{{ error }}</strong></p>

@@ -6,6 +6,9 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import *
 from django.views.generic import TemplateView
 from django.conf import settings
+from django.core.mail import EmailMessage
+from django.core.mail import send_mail
+from django.core.mail import send_mass_mail
 
 from .models import *
 from .forms import *
@@ -13,13 +16,15 @@ from .forms import *
 # Create your views here.
 
 def index(request):
-    template_name = 'Biblio/dashboard'  ###Template de view correction
+    template_name = 'pages/home.html'  ###Template de view correction
     corrections = Correction.objects.all()
     epreuves = Epreuve.objects.all()
     context ={
         'corrections' : corrections,
         'epreuves' : epreuves,
     }
+    if(request.user.is_authenticated):
+        return redirect('dashboard')
     return render(request=request, template_name=template_name, context=context)
 
 def about(request, *args, **kwargs):
@@ -40,17 +45,17 @@ def profil(request):
 # Utilisateurs
 class LoginView(TemplateView):
 
-  template_name = 'users/login.html'
+    template_name = 'users/login.html'
 
-  def post(self, request, **kwargs):
-    username = request.POST.get('username', False)
-    password = request.POST.get('password', False)
-    user = authenticate(username=username, password=password)
-    if user is not None and user.is_active:
-        login(request, user)
-        return HttpResponseRedirect( settings.LOGIN_REDIRECT_URL )
-
-    return render(request, self.template_name)
+    def post(self, request, **kwargs):
+        username = request.POST.get('username', False)
+        password = request.POST.get('password', False)
+        user = authenticate(username=username, password=password)
+        if user is not None and user.is_active:
+            login(request, user)
+            return HttpResponseRedirect( settings.LOGIN_REDIRECT_URL )
+    
+        return render(request, self.template_name)
 
 class LogoutView(TemplateView):
 
@@ -59,7 +64,17 @@ class LogoutView(TemplateView):
   def get(self, request, **kwargs):
     logout(request)
     return render(request, self.template_name)
-  
+
+def dashboard(request):
+    template_name = 'Biblio/dashboard.html'  ###Template de view correction
+    corrections = Correction.objects.all()
+    epreuves = Epreuve.objects.all()
+    context ={
+        'corrections' : corrections,
+        'epreuves' : epreuves,
+    }
+    return render(request=request, template_name=template_name, context=context)
+
 def create_user(request,*args,**kwargs):
     template_name= 'users/inscription.html'
 
@@ -96,7 +111,6 @@ def update_user(request,*args,**kwargs):
      
     obj = get_object_or_404(
         User,pk=current_user.id,
-        # pk=kwargs.get('pk'),
     )
     if request.method == 'GET':
         form = CustomUserChangeForm(
@@ -133,7 +147,7 @@ def update_user(request,*args,**kwargs):
           obj.is_fromEsmt = form.cleaned_data['is_fromEsmt']
           obj.is_newsletter = form.cleaned_data['is_newsletter']
           obj.save()
-          return redirect('home')
+          return redirect('profil')
         return render(request=request,template_name=template_name,context=context,)
       
 def changePassword_user(request,*args,**kwargs):
@@ -168,6 +182,58 @@ def changePassword_user(request,*args,**kwargs):
           return redirect('home')
         return render(request=request,template_name=template_name,context=context,)
 
+def newsletterTrue(request,*args,**kwargs):
+    template_name= 'pages/contact.html'
+    current_user = request.user
+     
+    obj = get_object_or_404(
+        User,pk=current_user.id,
+    )
+    if request.method == 'GET':
+        form = CustomUserChangeForm(
+            initial={
+              'email': obj.email,
+              'is_active': obj.is_active,
+              'is_fromEsmt': obj.is_fromEsmt,
+              'is_newsletter': obj.is_newsletter,
+          
+            }
+        )
+        context = {
+            'form': form,
+        }
+        return render(request=request,template_name=template_name,context=context,)
+    
+    if request.method == 'POST':
+        form =CustomUserChangeForm(
+           request.POST,
+           request.FILES,
+           initial={
+              'email': obj.email,
+              'is_active': obj.is_active,
+              'is_fromEsmt': obj.is_fromEsmt,
+              'is_newsletter': obj.is_newsletter,
+             
+            }
+        )
+        context = {
+            'message': "Vous etes bien abonné a la newsletter !",
+        }
+        if form.is_valid():
+          print(form.cleaned_data)
+          obj.is_fromEsmt = form.cleaned_data['is_fromEsmt']
+          obj.is_newsletter = True
+          obj.save()
+          send_mail(
+            subject="elibrary newsletter",
+            message="Bonjour, \n"+"Vous étes bien abonné a la newsletter de eLibrary ! \nCordialement eLibrary votre library favorite :)",
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=[obj.email],
+            fail_silently=False,
+            auth_user=settings.EMAIL_HOST_USER,
+            auth_password=settings.EMAIL_HOST_PASSWORD,)
+          return render(request=request,template_name=template_name,context=context,)
+        return render(request=request,template_name=template_name,context=context,)
 # Epreuve
 
 def add_epreuve(request, **kwargs):
@@ -279,6 +345,8 @@ def update_epreuve(request, *args, **kwargs):
             obj.matiere = form.cleaned_data.get('matiere')
             obj.filiere = form.cleaned_data.get('filiere')
             obj.professeur = form.cleaned_data.get('professeur')
+            if obj.file != form.cleaned_data.get('file'):
+                obj.deleteFile()
             obj.file = form.cleaned_data.get('file')
             obj.save()
             return redirect('dashboard') ###Template de view epreuve
@@ -286,19 +354,14 @@ def update_epreuve(request, *args, **kwargs):
         return render(request=request, template_name=template_name ,context=context)
 
 def delete_epreuve(request, *args, **kwargs):
-    template_name = 'Biblio/delete_epreuve.html'  ###Template de suppression 
+    # template_name = 'Biblio/delete_epreuve.html'  ###Template de suppression 
     obj = get_object_or_404(
         Epreuve,
         pk = kwargs.get('pk')
     )
-    if request.method =="POST":
-        obj.delete()
-        return redirect("dashboard") ###Template de view epreuve
-    return render(
-        request=request,
-        template_name=template_name
-        )
-
+    obj.delete()
+    return redirect("dashboard") ###Template de view epreuve
+    
 #### Correction
 
 def add_correction(request, **kwargs):
@@ -344,7 +407,7 @@ def add_correction(request, **kwargs):
             objet.id_user = obj1
             objet.id_epreuve = obj
             objet.save()
-            return redirect('index')
+            return redirect('dashbord')
         return render(request=request,template_name=template_name,context=context,)
 
 def list_correction(request, **kwargs):
@@ -367,6 +430,7 @@ def correction_byEpreuveId(request, **kwargs):
     corrections = Correction.objects.filter(id_epreuve=obj.id).order_by('-id')
     context ={
         'corrections' : corrections,
+        'epreuve': obj,
     }
          
     return render(request=request, template_name=template_name, context=context)
@@ -396,16 +460,19 @@ def update_correction(request, *args, **kwargs):
                 request.POST,
                 request.FILES,
                 initial={
-                    
+                'intitulet': obj.intitulet,
+                'file': obj.file,
                 }
             )
         context = { 'form': form }
         if form.is_valid():
                 print(form.cleaned_data)
                 obj.intitulet = form.cleaned_data.get('intitulet')
-                obj.file = request.FILES['file']
+                if obj.file != form.cleaned_data.get('file'):
+                    obj.deleteFile()
+                obj.file = form.cleaned_data.get('file')
                 obj.save()
-                return HttpResponseRedirect("Biblio/dashboard") ###Template de view correction
+                return redirect('corrections' ,pk=obj.id_epreuve.id) ###Template de view correction
 
 def delete_correction(request, *args, **kwargs):
     template_name = 'Biblio/delete_epreuve.html' ######Template de suppression
@@ -435,3 +502,32 @@ def download(request, *args, **kwargs):
     # return HttpResponseRedirect( settings.LOGIN_REDIRECT_URL )
     raise Http404
 
+#mail
+def sendEmail(request, *args, **kwargs):
+    template_name = 'users/newsletter.html'
+    users= User.objects.all().filter(is_newsletter=True)
+    usersEMAIL=list(users)
+    
+    if not request.user.is_staff:
+        raise Http404
+    
+    if request.method == 'GET':
+        return render(request=request,template_name=template_name)
+    
+    if request.method == 'POST':
+        subject=request.POST.get('subject', False)
+        body=request.POST.get('body', False)
+        context = {
+            'message': 'Mail envoyé aux abonnés de la newsletter',
+        }
+        send_mail(
+            subject=subject,
+            message=body,
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=usersEMAIL,
+            fail_silently=False,
+            auth_user=settings.EMAIL_HOST_USER,
+            auth_password=settings.EMAIL_HOST_PASSWORD,)
+        return render(request=request, template_name=template_name,context=context)
+        
+    return render(request=request, template_name=template_name,context=context)

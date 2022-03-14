@@ -1,7 +1,9 @@
 import array
 from cProfile import label
 import email
+import gettext
 from django import forms
+from django.conf import settings
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm, AuthenticationForm
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
@@ -10,29 +12,29 @@ from .models import Epreuve, User
 
 
 class CustomUserCreationForm(UserCreationForm,forms.Form):
-    email=forms.CharField(label='', max_length=200, strip=True, min_length=2,
+    email=forms.CharField(label='E-mail ',required=True, max_length=200, strip=True, min_length=2,
          widget=forms.TextInput(
             attrs={
-                'type':'text',
-                'class': 'form-control',
+                'type':'email',
+                'class': 'form-control mb-3',
                 'placeholder': 'Adresse e-mail',
             }
         )
     )
-    password1=forms.CharField(label='', max_length=200, strip=True, min_length=2,
+    password1=forms.CharField(label='Mot de passe',required=True, max_length=200, strip=True, min_length=2,
          widget=forms.PasswordInput(
             attrs={
                 'type':'password',
-                'class': 'form-control',
+                'class': 'form-control col-6',
                 'placeholder': 'Mot de passe',
             }
         )
     )
-    password2=forms.CharField(label='', max_length=200, strip=True, min_length=2,
+    password2=forms.CharField(label='',required=True, max_length=200, strip=True, min_length=2,
          widget=forms.PasswordInput(
             attrs={
                 'type':'password',
-                'class': 'form-control',
+                'class': 'form-control col-6',
                 'placeholder': 'Confirmer le mot de passe',
             }
         )
@@ -41,32 +43,28 @@ class CustomUserCreationForm(UserCreationForm,forms.Form):
         widget=forms.CheckboxInput(
             attrs={
                 'type': 'checkbox',
-                
                 }
             )
         )
     is_newsletter=forms.BooleanField(required=False,label="S'abonner a la newsletter",
         widget=forms.CheckboxInput(
             attrs={
-                'type': 'checkbox'
+                'type': 'checkbox',
                 }
             )
         )
     class Meta:
         model = User
         fields = ('email', 'password1', 'password2', 'is_fromEsmt','is_newsletter')
-
+        
 
 class CustomUserChangeForm(UserChangeForm,forms.Form):
-    username = forms.EmailField(label='', max_length=200, min_length=2,
-         widget=forms.EmailInput(
+    password = forms.Field(required=False,label='',
+         widget=forms.HiddenInput(
             attrs={
-                'type':'email',
-                'class': 'form-control',
-                'placeholder': 'Nouveau email',
+                'type':'hidden',
             }
-        )
-    )
+        ))
     is_fromEsmt= forms.BooleanField(required=False,label="Etudiant de L'ESMT",widget=forms.CheckboxInput(attrs={'type': 'checkbox'}))
     is_newsletter=forms.BooleanField(required=False,label="S'abonner a la newsletter",widget=forms.CheckboxInput(attrs={'type': 'checkbox'}))
     class Meta:
@@ -142,14 +140,13 @@ class EpreuveForm(forms.ModelForm):
         )
     )
 
-    matiere = forms.CharField(
-        label='',
-        max_length=200,
-        strip=True,
-        min_length=2,
-        widget=forms.TextInput(
+    matiere = forms.ChoiceField(
+        label='Matiere ',
+        required=True,
+        choices=[(x,y) for(x,y) in settings.MATIERES],
+        widget=forms.Select(
             attrs={
-                'type': 'text',
+                'type': 'select',
                 'class': 'form-control',
                 'placeholder': 'Entrez le nom de la matière ',
 
@@ -238,7 +235,7 @@ class loginForm(AuthenticationForm):
 
     password = forms.CharField(
         label='',
-        required = True, min_length=8, max_length=30,
+        required = True, min_length=1, max_length=30,
         widget = forms.PasswordInput(
             attrs = {
                 'type': 'password',

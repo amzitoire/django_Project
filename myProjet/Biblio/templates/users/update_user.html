@@ -1,10 +1,9 @@
-<h1>Changer user</h1>
+
 {% extends 'layouts/base.html' %}
 
 {% load static %}
 
 {%block css %}
-<!-- <link rel="stylesheet" href="{% static 'css/style.css' %}"> -->
 {% endblock %}
 
 {% block title %} Dashboard {% endblock %}
@@ -38,14 +37,11 @@
                 </div>
                 {% endfor %}
                 <div class="form-group flex justify-content-center mt-3">
-                    <button type="submit" class="bg-blue-600 btn btn-primary mr-5">VALIDER</button>
-                    <button type="reset" class="bg-red-600 btn btn-danger">ANNULER</button>
+                    <button type="submit" class="btn btn-outline-dark mr-5">Valider changement</button>
+                   
                 </div>
-                <!-- <p class="text-center text-lg py-5 ">
-                        <span class="text-gray-600"> Vous avez déjà un compte ?</span> <a href="{% url 'login' %}" class="underline text-blue-600 hover:no-underline">Connectez-vous</a>
-                    </p> -->
             </form>
-        </div>
+           </div>
     </div>
 </div>
 {% endblock %}

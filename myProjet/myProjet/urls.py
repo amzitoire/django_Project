@@ -23,8 +23,10 @@ from Biblio.forms import loginForm
 from django.conf.urls.static import static
 
 urlpatterns = [
-    #admin
+#admin
     path('admin/', admin.site.urls),
+    path('newsletter',login_required(sendEmail),name='newsletter'),
+#visiteur
     path('accounts', include('django.contrib.auth.urls')),
     path('', index, name='home'),
     path('about/', about, name='about'),
@@ -39,9 +41,9 @@ urlpatterns = [
     path('inscription/', create_user, name='inscription'),
     path('profil/update_user/', login_required(update_user), name='update'),
     path('profil/change_password/', login_required(changePassword_user), name='password'),
-
+    path('contact/abonnement',login_required(newsletterTrue),name='newsletterTrue'),
 #Epreuve
-    path('bibliotheque/dashboard/', login_required(index), name='dashboard'),
+    path('bibliotheque/dashboard/', login_required(dashboard), name='dashboard'),
     path('bibliotheque/new_epreuve/',  login_required(add_epreuve), name='new_epreuve'),
     path('bibliotheque/epreuve/<int:pk>', login_required(details_epreuve), name='details_epreuve'),
     path('bibliotheque/update/epreuve/<int:pk>', login_required(update_epreuve), name='update_epreuve'),
@@ -49,8 +51,7 @@ urlpatterns = [
    
 #Correction
     path('bibliotheque/add_correction/epreuve/<int:pk>',  login_required(add_correction), name='add_correction'),
-    path('bibliotheque/correction/<int:pk>', login_required(correction_byId),name = 'corrections'),
-    path('bibliotheque/view_correction/', (correction_byId), name ='view_correction'),
+    path('bibliotheque/corrections/epreuve/<int:pk>', login_required(correction_byEpreuveId),name = 'corrections'),
     path('bibliotheque/update/correction/<int:pk>/', login_required(update_correction), name='update_correction'),
     path('bibliotheque/list_correction/<int:pk>', login_required(list_correction), name='list_correction' ),
     path('bibliotheque/delete/correction/<int:pk>', login_required(delete_epreuve), name='delete_correction'),

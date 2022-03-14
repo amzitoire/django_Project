@@ -70,7 +70,10 @@ class Super(models.Model):
     def delete(self, *args, **kwargs):
         os.remove(str(self.file))
         super().delete(*args, **kwargs)
-        
+    
+    def deleteFile(self, *args, **kwargs):
+        os.remove(str(self.file))
+       
     class Meta:
         abstract = True
 
@@ -80,9 +83,6 @@ class Epreuve(Super):
     filiere = models.CharField(max_length=200)
     professeur = models.CharField(max_length=200)
     id_user= models.ForeignKey(User, on_delete=models.CASCADE)
-
-    # def __str__(self):
-    #     return self.matiere
 
     def get_url(self):
         return reverse(kwargs={'pk':self.id})
