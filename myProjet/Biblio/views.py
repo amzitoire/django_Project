@@ -407,7 +407,7 @@ def add_correction(request, **kwargs):
             objet.id_user = obj1
             objet.id_epreuve = obj
             objet.save()
-            return redirect('dashbord')
+            return redirect('dashboard')
         return render(request=request,template_name=template_name,context=context,)
 
 def list_correction(request, **kwargs):

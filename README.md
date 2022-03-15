@@ -1,8 +1,11 @@
 # django_Project
     #initialize project
         #venv
-        #django_Project
+        py -m virtualenv env
+        #django_Project requirement 
+        pip install -r path/to/requirement.text
         #env
+        create env file in /myProjet
     #import database
         #
     #test
