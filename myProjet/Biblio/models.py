@@ -91,7 +91,7 @@ class Epreuve(Super):
     
 
 class Correction(Super):
-    id_epreuve= models.OneToOneField(Epreuve, on_delete=models.CASCADE)
+    id_epreuve= models.ForeignKey(Epreuve, on_delete=models.CASCADE)
     id_user= models.ForeignKey(User, on_delete=models.CASCADE)
     
     def get_url(self):

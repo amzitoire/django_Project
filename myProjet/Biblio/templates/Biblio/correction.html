@@ -18,7 +18,23 @@
         <div class="col-12 col-md-6 col-lg-4 col-xl-3">
             <div class="card shadow-xl mt-3 rounded">
                 <div class="align-items-center p-2 text-center">
-                    <img src="{% static 'images/dev.png' %}" alt="" class="card-img-top rounded" width="160">
+                    {% if epreuve.matiere == "Java" %}
+                    <img src="{% static 'images/java.png' %}" alt="" class="card-img-top rounded" width="160" >
+                    {% elif epreuve.matiere == "Laravel" %}
+                    <img src="{% static 'images/laravel.png' %}" alt="" class="card-img-top rounded" width="160">
+                    {% elif epreuve.matiere == "Java EE" %}
+                        <img src="{% static 'images/jee.png' %}" alt="" class="card-img-top rounded" width="160">
+                    {%elif epreuve.matiere == "Django" %}
+                        <img src="{% static 'images/django.png' %}" alt="" class="card-img-top rounded" width="160">
+                    {%elif epreuve.matiere == "Test et Logiciels" %}
+                        <img src="{% static 'images/test_logiciel.png' %}" alt="" class="card-img-top rounded" width="160">
+                    {%elif epreuve.matiere == "Php" %}
+                        <img src="{% static 'images/php.png' %}" alt="" class="card-img-top rounded" width="160">
+                    {%elif epreuve.matiere == "Angular" %}
+                        <img src="{% static 'images/angular.png' %}" alt="" class="card-img-top rounded" width="160">
+                    {%else%}
+                        <img src="{% static 'images/computer.png' %}" alt="" class="card-img-top rounded" width="160">
+                    {% endif %}
                     <div class="card-body mt-3 info">
                         <h5 class="card-title"><strong> Titre: </strong><strong>{{ correction.intitulet }}</strong></h5>
                         <p class="text-start"><strong> intitulet epreuve: </strong>{{ epreuve.intitulet }}</p>
@@ -33,8 +49,8 @@
                     </div>
                     {%if correction.id_user_id == request.user.id %}
                     <div class="row mb-3">
-                    <a href="{% url 'update_correction' correction.id %}" class="btn-sm btn-warning col-4 mr-3">Update</a>
-                    <a href="{% url 'delete_correction' correction.id %}" class="btn-sm btn-danger col-5">Delete</a>
+                    <a href="{% url 'update_correction' correction.id %}" class="btn-sm btn-warning col-4 mr-3"><i class="fas fa-edit"></i> Edit</a>
+                    <a href="{% url 'delete_correction' correction.id %}" class="btn-sm btn-danger col-5"><i class="fa fa-trash" aria-hidden="true"></i> Delete</a>
                     </div>
                     {%endif%}
                 </div>

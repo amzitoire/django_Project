@@ -56,7 +56,7 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('intitulet', models.CharField(max_length=200)),
                 ('file', models.FileField(upload_to='files')),
-                ('id_epreuve', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to='Biblio.epreuve')),
+                ('id_epreuve', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='Biblio.epreuve')),
                 ('id_user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
             options={
